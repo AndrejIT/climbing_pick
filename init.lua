@@ -40,6 +40,30 @@ climbing_pick.pick_on_use = function(itemstack, user, pointed_thing)
     local tool_capabilities = tool_definition.tool_capabilities
     -- local punch_interval = tool_capabilities.full_punch_interval    -- not sure how to use correctly
 
+    -- sound effect
+    minetest.sound_play("default_metal_footstep", {
+        pos = pt.under,
+        max_hear_distance = 6,
+    })
+    -- visual effect
+    minetest.add_particlespawner({
+        amount = 20,
+        time = 0.2,
+        minpos = {x=pt.under.x, y=pt.under.y+0.5, z=pt.under.z},
+        maxpos = {x=pt.under.x, y=pt.under.y+0.5, z=pt.under.z},
+        minvel = {x=-2, y=0, z=-2},
+        maxvel = {x=2, y=0, z=2},
+        minacc = {x=0, y=0, z=0},
+        maxacc = {x=0, y=0, z=0},
+        minexptime = 0.1,
+        maxexptime = 1,
+        minsize = 0.1,
+        maxsize = 1,
+        collisiondetection = false,
+        vertical = false,
+        texture = "default_item_smoke.png"
+    })
+
     -- no way to set speed of player
     -- emulate it in ugly way
     -- https://github.com/minetest/minetest/issues/1176 :(
