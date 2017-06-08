@@ -43,36 +43,18 @@ climbing_pick.pick_on_use = function(itemstack, user, pointed_thing)
     -- no way to set speed of player
     -- emulate it in ugly way
     -- https://github.com/minetest/minetest/issues/1176 :(
-    local plpos = user:get_pos()
-    plpos.y = plpos.y + 0.2
-    user:moveto(plpos, true)
-    plpos = user:get_pos()
-    plpos.y = plpos.y + 0.2
-    user:moveto(plpos, true)
-    plpos = user:get_pos()
-    plpos.y = plpos.y + 0.2
-    user:moveto(plpos, true)
-    plpos = user:get_pos()
-    plpos.y = plpos.y + 0.2
-    user:moveto(plpos, true)
-    plpos = user:get_pos()
-    plpos.y = plpos.y + 0.2
-    user:moveto(plpos, true)
+    local repetitions = 5
     if tool_capabilities.groupcaps.climbing.maxlevel > 1 then
-        plpos = user:get_pos()
-        plpos.y = plpos.y + 0.2
-        user:moveto(plpos, true)
-        plpos = user:get_pos()
-        plpos.y = plpos.y + 0.2
-        user:moveto(plpos, true)
-        if tool_capabilities.groupcaps.climbing.maxlevel > 2 then
-            plpos = user:get_pos()
-            plpos.y = plpos.y + 0.2
-            user:moveto(plpos, true)
-            plpos = user:get_pos()
-            plpos.y = plpos.y + 0.2
-            user:moveto(plpos, true)
-        end
+    	repetitions = repetitions + 2
+    end
+    if tool_capabilities.groupcaps.climbing.maxlevel > 2 then
+    	repetitions = repetitions + 2
+    end
+
+    local plpos = user:get_pos()
+    for i = 1, repetitions do
+    	plpos.y = plpos.y + 0.2
+    	user:moveto(plpos, true)
     end
 
     if not (creative and creative.is_enabled_for
