@@ -36,6 +36,17 @@ climbing_pick.pick_on_use = function(itemstack, user, pointed_thing)
         return
     end
 
+    local plpos = user:get_pos()
+
+    local pl = {x=plpos.x, y=plpos.y+3, z=plpos.z}
+    local above_player = minetest.get_node(pl)
+
+    -- node above player also must be not walkable
+    local nodedef3 = minetest.registered_nodes[above_player.name]
+    if nodedef3 and nodedef3.walkable then
+        return
+    end
+
     local tool_definition = itemstack:get_definition()
     local tool_capabilities = tool_definition.tool_capabilities
     -- local punch_interval = tool_capabilities.full_punch_interval    -- not sure how to use correctly
@@ -75,7 +86,6 @@ climbing_pick.pick_on_use = function(itemstack, user, pointed_thing)
     	repetitions = repetitions + 2
     end
 
-    local plpos = user:get_pos()
     for i = 1, repetitions do
     	plpos.y = plpos.y + 0.2
     	user:moveto(plpos, true)
