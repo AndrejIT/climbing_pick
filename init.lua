@@ -76,13 +76,15 @@ climbing_pick.pick_on_use = function(itemstack, user, pointed_thing)
         return
     end
 
-    -- node above must be not walkable
+    local plpos = user:get_pos()
+
+    -- if node above is not walkable then limit interaction distance
     local nodedef2 = minetest.registered_nodes[above.name]
     if nodedef2 and nodedef2.walkable then
-        return
+        if plpos and p and vector.distance(plpos, p) >= 3 then
+            return
+        end
     end
-
-    local plpos = user:get_pos()
 
     local pl = {x=plpos.x, y=plpos.y+3, z=plpos.z}
     local above_player = minetest.get_node(pl)
