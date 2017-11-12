@@ -8,7 +8,53 @@ climbing_pick.pick_on_use = function(itemstack, user, pointed_thing)
     if not pt then
         return
     end
-    if pt.type ~= "node" then
+    if user and pt.type == "object" and pt.ref then
+        local pos = user:getpos()
+        local target_pos = pt.ref:get_pos()
+        if pos and target_pos and vector.distance(pos, target_pos) < 2 then
+            local tmp_dir = vector.direction(pos, target_pos)
+            local damage = 0
+            if pt.ref:is_player() then
+                if math.random(1, 100) > 33 then
+                    damage = 1
+                end
+            else
+                damage = 5
+            end
+            pt.ref:punch(user, 1.0,  {
+                    full_punch_interval=1.0,
+                    damage_groups = {fleshy=damage}
+                }, tmp_dir)
+            -- visual effect
+            minetest.add_particlespawner({
+                amount = 20,
+                time = 0.2,
+                minpos = {x=target_pos.x, y=target_pos.y+0.5, z=target_pos.z},
+                maxpos = {x=target_pos.x, y=target_pos.y+0.5, z=target_pos.z},
+                minvel = {x=-2, y=0, z=-2},
+                maxvel = {x=2, y=0, z=2},
+                minacc = {x=0, y=0, z=0},
+                maxacc = {x=0, y=0, z=0},
+                minexptime = 0.1,
+                maxexptime = 1,
+                minsize = 0.1,
+                maxsize = 1,
+                collisiondetection = false,
+                vertical = false,
+                texture = "default_item_smoke.png"
+            })
+            local tool_definition = itemstack:get_definition()
+            local tool_capabilities = tool_definition.tool_capabilities
+            local uses = tool_capabilities.groupcaps.climbing.uses
+            itemstack:add_wear(65535/(uses-1))
+            -- tool break sound
+            if itemstack:get_count() == 0 and tool_definition.sound and tool_definition.sound.breaks then
+                minetest.sound_play(tool_definition.sound.breaks, {pos = pt.above, gain = 0.5})
+            end
+            return itemstack
+        end
+        return
+    elseif pt.type ~= "node" then
         return
     end
 
