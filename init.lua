@@ -32,7 +32,7 @@ climbing_pick.pick_on_use = function(itemstack, user, pointed_thing)
     if user and pt.type == "object" and pt.ref and pt.ref:is_player() then
         local pos = user:getpos()
         local target_pos = pt.ref:get_pos()
-        if pos and target_pos and vector.distance(pos, target_pos) < 2 then
+        if pos and target_pos and vector.distance(pos, target_pos) < 5 then
             local tmp_dir = vector.direction(pos, target_pos)
             local damage = 1
             if math.random(1, 100) > 33 then
@@ -59,7 +59,7 @@ climbing_pick.pick_on_use = function(itemstack, user, pointed_thing)
     elseif user and pt.type == "object" and pt.ref then
             local pos = user:getpos()
             local target_pos = pt.ref:get_pos()
-            if pos and target_pos and vector.distance(pos, target_pos) < 2 then
+            if pos and target_pos and vector.distance(pos, target_pos) < 5 then
                 local tmp_dir = vector.direction(pos, target_pos)
                 local damage = 5
                 if math.random(1, 100) > 33 then
@@ -250,6 +250,12 @@ minetest.register_craft({
 		{'group:stick', '', ''},
 		{'group:stick', '', ''},
 	},
+})
+
+minetest.register_craft({
+	type = "fuel",
+	recipe = "climbing_pick:pick_wood",
+	burntime = 20,
 })
 
 minetest.register_craft({
