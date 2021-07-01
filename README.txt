@@ -1,4 +1,5 @@
 Mod for Minetest game "Climbing pick"
+Starting from version 5.1
 Climbing pick - allow to jump over more than one block.
 Meant to partially replace "sneak glitch" feature.
 
